@@ -1,0 +1,11 @@
+
+<h1>Your movings</h1>
+
+<% moves.forEach((move) => { %>
+      <a href="/moves/<%= move._id %>">
+        <%= move.name %>
+      </a>
+      <br>
+  <% })%>
+
+ 
