@@ -54,4 +54,15 @@ router.post('/:id/update', (req, res, next) => {
     });
 });
 
+router.post('/:id/delete', (req, res, next) => {
+  const { id } = req.params;
+  Move.findByIdAndDelete(id)
+    .then(() => {
+      res.redirect('/moves');
+    })
+    .catch((error) => {
+      next(error);
+    });
+});
+
 module.exports = router;

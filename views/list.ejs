@@ -8,6 +8,9 @@
       <a href="/moves/<%= move._id %>/update">
         Update
       </a>
+      <form action="/moves/<%= move._id %>/delete" method="post">
+        <input type="submit" value="Delete">
+      </form>
       <br>
   <% })%>
 
