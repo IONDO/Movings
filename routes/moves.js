@@ -10,6 +10,47 @@ router.get('/', (req, res, next) => {
       res.render('list', {
         moves,
       });
+    })
+    .catch((error) => {
+      next(error);
+    });
+});
+
+router.get('/:id', (req, res, next) => {
+  const { id } = req.params;
+  Move.findById(id)
+    .then((move) => {
+      res.render('move', {
+        move,
+      });
+    })
+    .catch((error) => {
+      next(error);
+    });
+});
+
+router.get('/:id/update', (req, res, next) => {
+  const { id } = req.params;
+  Move.findById(id)
+    .then((move) => {
+      res.render('update', {
+        move,
+      });
+    })
+    .catch((error) => {
+      next(error);
+    });
+});
+
+router.post('/:id/update', (req, res, next) => {
+  const { id } = req.params;
+  const { name, origin, destination } = req.body;
+  Move.findByIdAndUpdate(id, { name, origin, destination })
+    .then(() => {
+      res.redirect('/moves');
+    })
+    .catch((error) => {
+      next(error);
     });
 });
 
