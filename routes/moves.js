@@ -88,6 +88,17 @@ router.post('/:moveId/box/:boxId/update', (req, res, next) => {
     });
 });
 
+router.post('/:moveId/box/:boxId/delete', (req, res, next) => {
+  const { moveId, boxId } = req.params;
+  Box.findByIdAndDelete(boxId)
+    .then(() => {
+      res.redirect(`/move/${moveId}`);
+    })
+    .catch((error) => {
+      next(error);
+    });
+});
+
 router.get('/:id/update', (req, res, next) => {
   const { id } = req.params;
   Move.findById(id)
