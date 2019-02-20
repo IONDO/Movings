@@ -1,2 +1,17 @@
 <h1><%= move.name %> boxes</h1>
-<a href="/move/<%= move._id %>">Create a box</a>
+
+<% boxes.forEach((box) => { %>
+    <a href="/move/<%= move._id %>/box/<%= box._id %>">
+      <%= box.name %>
+      </a>
+      <a href="/move/<%= move._id %>/box/<%= box._id %>/update">
+        Update
+      </a>
+      <form action="/move/<%= move._id %>/box/<%= box._id %>/delete" method="post">
+        <input type="submit" value="Delete">
+      </form>
+      <br>
+  <% })%>
+
+
+<a href="/move/<%= move._id %>/box/new">Create a box</a>

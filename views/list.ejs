@@ -2,13 +2,13 @@
 <h1>Your movings</h1>
 
 <% moves.forEach((move) => { %>
-      <a href="/moves/<%= move._id %>">
+      <a href="/move/<%= move._id %>">
         <%= move.name %>
       </a>
-      <a href="/moves/<%= move._id %>/update">
+      <a href="/move/<%= move._id %>/update">
         Update
       </a>
-      <form action="/moves/<%= move._id %>/delete" method="post">
+      <form action="/move/<%= move._id %>/delete" method="post">
         <input type="submit" value="Delete">
       </form>
       <br>

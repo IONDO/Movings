@@ -2,6 +2,7 @@ const express = require('express');
 
 const router = express.Router();
 const Move = require('../models/data');
+const Box = require('../models/box');
 
 /* GET moves listing. */
 router.get('/', (req, res, next) => {
@@ -16,12 +17,45 @@ router.get('/', (req, res, next) => {
     });
 });
 
-router.get('/:id', (req, res, next) => {
+router.get('/:id', async (req, res, next) => {
   const { id } = req.params;
-  Move.findById(id)
-    .then((move) => {
-      res.render('move', {
-        move,
+  try {
+    const move = await Move.findById(id);
+    const boxes = await Box.find({ moveId: id });
+    res.render('move', { move, boxes });
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.get('/:moveId/box/new', (req, res, next) => {
+  const { moveId } = req.params;
+  res.render('box', { moveId });
+});
+
+router.post('/:moveId/box/new', (req, res, next) => {
+  const { moveId } = req.params;
+  const { name, description } = req.body;
+  Box.create({
+    name,
+    description,
+    moveId,
+  })
+    .then(() => {
+      // TODO: redirect to the new move
+      res.redirect(`/move/${moveId}`);
+    })
+    .catch((error) => {
+      next(error);
+    });
+});
+
+router.get('/:moveId/box/:boxId', (req, res, next) => {
+  const { boxId } = req.params;
+  Box.findById(boxId)
+    .then((box) => {
+      res.render('box-show', {
+        box,
       });
     })
     .catch((error) => {
