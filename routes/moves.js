@@ -51,11 +51,11 @@ router.post('/:moveId/box/new', (req, res, next) => {
 });
 
 router.get('/:moveId/box/:boxId', (req, res, next) => {
-  const { boxId } = req.params;
+  const { boxId, moveId } = req.params;
   Box.findById(boxId)
     .then((box) => {
       res.render('box-show', {
-        box,
+        box, moveId,
       });
     })
     .catch((error) => {
