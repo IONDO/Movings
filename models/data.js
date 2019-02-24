@@ -3,11 +3,17 @@ const mongoose = require('mongoose');
 
 const { Schema } = mongoose;
 
+const { ObjectId } = Schema.Types;
+
 const moveSchema = new Schema({
   name: String,
   origin: String,
   destination: String,
-  _id: { type: Schema.Types.ObjectId },
+  userId: {
+    type: ObjectId,
+    ref: 'User',
+    required: true,
+  },
 });
 
 const Move = mongoose.model('Move', moveSchema);

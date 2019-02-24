@@ -5,9 +5,11 @@ const expressLayouts = require('express-ejs-layouts');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const mongoose = require('mongoose');
+const session = require('express-session');
+const MongoStore = require('connect-mongo')(session);
 
-const indexRouter = require('./routes/index');
-const newRouter = require('./routes/new');
+const homeRouter = require('./routes/home');
+const boxRouter = require('./routes/box');
 const movesRouter = require('./routes/moves');
 
 mongoose.connect('mongodb://localhost:27017/Movings', { useNewUrlParser: true })
@@ -15,7 +17,7 @@ mongoose.connect('mongodb://localhost:27017/Movings', { useNewUrlParser: true })
     console.log('connected');
   })
   .catch((error) => {
-    console.log(error);
+    next(error);
   });
 
 const app = express();
@@ -31,9 +33,21 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(session({
+  secret: 'basic-auth-secret',
+  cookie: {
+    maxAge: 24 * 60 * 60 * 1000,
+  },
+  resave: true,
+  saveUninitialized: true,
+  store: new MongoStore({
+    mongooseConnection: mongoose.connection,
+    ttl: 24 * 60 * 60, // 1 day
+  }),
+}));
 
-app.use('/', indexRouter);
-app.use('/move/new', newRouter);
+app.use('/', homeRouter);
+app.use('/box', boxRouter);
 app.use('/move', movesRouter);
 
 // catch 404 and forward to error handler
